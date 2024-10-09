@@ -2,11 +2,11 @@ apiVersion: humanitec.org/v1b1
 profile: humanitec/default-module
 spec:
   containers:
-    store-admin:
+    store-front:
       startup_probe:
         type: "http"
         path: /health
-        port: 8081
+        port: 8080
         failureThreshold: 3
         initialDelaySeconds: 5
         periodSeconds: 5
@@ -17,4 +17,4 @@ spec:
       readiness_probe:
         failureThreshold: 3
         initialDelaySeconds: 3
-        periodSeconds: 5
+        periodSeconds: 3
