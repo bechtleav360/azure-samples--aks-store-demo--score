@@ -1,0 +1,42 @@
+apiVersion: score.dev/v1b1
+metadata:
+  name: store-admin
+containers:
+  store-admin:
+    image: ghcr.io/azure-samples/aks-store-demo/store-admin:1.5.1
+    variables:
+      VUE_APP_MAKELINE_SERVICE_URL: "http://${resources.makeline-service.name}:3001/"
+      VUE_APP_PRODUCT_SERVICE_URL: "http://${resources.product-service.name}:3002/"
+    livenessProbe:
+      httpGet:
+        path: /health
+        port: 8081
+    readinessProbe:
+      httpGet:
+        path: /health
+        port: 8081
+    resources:
+      limits:
+        memory: "512Mi"
+        cpu: "1000m"
+      requests:
+        memory: "200Mi"
+        cpu: "1m"
+service:
+  ports:
+    http:
+      port: 8081
+      targetPort: 8081
+resources:
+  dns:
+    type: dns
+  route:
+    type: route
+    params:
+      host: ${resources.dns.host}
+      path: /
+      port: 8081
+  makeline-service:
+    type: service
+  product-service:
+    type: service
